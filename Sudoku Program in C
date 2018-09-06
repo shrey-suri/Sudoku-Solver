@@ -1,0 +1,77 @@
+//C Program
+#include <malloc.h>
+#include <stdbool.h>
+void print(int** a){
+    	for(int i=0;i<9;i++){
+		for(int j=0;j<9;j++){
+	    printf("%d ",a[i][j]);
+	}
+    	}
+    	printf("\n");
+}
+bool inRow(int x,int k,int** a){
+    for(int i=0;i<9;i++){
+        if(a[x][i]==k)
+        return true;
+    }
+    return false;
+}
+bool inCol(int y,int k,int** a){
+    for(int i=0;i<9;i++){
+        if(a[i][y]==k)
+        return true;
+    }
+    return false;
+}
+bool inBox(int x,int y,int k,int** a){
+    for(int i=x;i<(x+3);i++){
+        for(int j=y;j<(y+3);j++){
+             if(a[i][j]==k)
+        return true;
+        }
+    }
+     return false;
+}
+bool isSafe(int x,int y,int k,int** a){
+    return !inRow(x,k,a)&&!inCol(y,k,a)&&!inBox(x-(x%3),y-(y%3),k,a);
+}
+bool solve(int** a){
+    for(int i=0;i<9;i++){
+        for(int j=0;j<9;j++){
+            if(a[i][j]==0){
+                for(int k=1;k<10;k++){
+                    if(isSafe(i,j,k,a)){
+                        a[i][j]=k;
+                        if(solve(a)){
+                        //print(a);
+                        return true;
+                        }
+                        a[i][j]=0;
+                    }
+                }
+                return false;
+            }
+        }
+    }
+    return true;
+}
+int main() {
+	//code
+	int t;
+	scanf("%d",&t);
+	while(t--){
+	int** a =(int**) malloc(9*sizeof(int*));
+		for(int i=0;i<9;i++){
+		    a[i] =(int*) malloc(9*sizeof(int));
+		}
+	for(int i=0;i<9;i++){
+	for(int j=0;j<9;j++){
+	    scanf("%d",&a[i][j]);
+	}
+	}
+	//print(a);
+	if(solve(a))
+	print(a);
+	}
+	return 0;
+}
